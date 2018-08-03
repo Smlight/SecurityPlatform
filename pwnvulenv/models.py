@@ -6,25 +6,27 @@ from django.contrib.auth.models import User
 class Challenge(models.Model):
     title = models.CharField(max_length=64)
     desc = models.TextField()
-    year = models.IntegerField()
-    game = models.CharField(max_length=64)
+    year = models.IntegerField(null=True)
+    game = models.CharField(max_length=64, null=True)
     file = models.FileField()
-    docker_repo = models.CharField(max_length=256)
-    vagrant_box = models.CharField(max_length=256)
-    poc = models.TextField()
-    references = models.CharField(max_length=256)
+    difficulty = models.IntegerField(null=True)
+    docker_repo = models.CharField(max_length=256, null=True)
+    vagrant_box = models.CharField(max_length=256, null=True)
+    poc = models.TextField(null=True)
+    references = models.CharField(max_length=256, null=True)
 
 
 class CVE(models.Model):
-    cveid = models.CharField(max_length=64)
+    cveid = models.CharField(max_length=64, primary_key=True)
     desc = models.TextField()
-    dtime = models.DateField()
+    dtime = models.DateField(null=True)
     program = models.CharField(max_length=64)
     version = models.CharField(max_length=64)
-    docker_repo = models.CharField(max_length=256)
-    vagrant_box = models.CharField(max_length=256)
-    poc = models.TextField()
-    references = models.CharField(max_length=256)
+    difficulty = models.IntegerField(null=True)
+    docker_repo = models.CharField(max_length=256, null=True)
+    vagrant_box = models.CharField(max_length=256, null=True)
+    poc = models.TextField(null=True)
+    references = models.CharField(max_length=256, null=True)
 
 
 class RunningChallenge(models.Model):

@@ -6,19 +6,21 @@ from pwnvulenv.models import Challenge, CVE, RunningChallenge, RunningCve
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'is_superuser', 'is_active')
+        fields = ('username', 'password', 'email', 'is_superuser', 'is_active')
 
 
 class ChallengeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Challenge
-        fields = ('title', 'desc', 'year', 'game', 'file', 'docker_repo', 'vagrant_box', 'poc', 'references')
+        fields = ('id', 'title', 'desc', 'year', 'game', 'file', 'difficulty', 'docker_repo', 'vagrant_box', 'poc',
+                  'references')
 
 
 class CveSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CVE
-        fields = ('cveid', 'desc', 'dtime', 'program', 'version', 'docker_repo', 'vagrant_box', 'poc', 'references')
+        fields = ('cveid', 'desc', 'dtime', 'program', 'version', 'difficulty', 'docker_repo', 'vagrant_box', 'poc',
+                  'references')
 
 
 class RunningChallengeSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,4 +33,3 @@ class RunningCveSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RunningCve
         fields = ('uid', 'cid')
-

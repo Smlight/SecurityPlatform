@@ -16,14 +16,27 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView, RedirectView
 from rest_framework import routers
 from pwnvulenv import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
+router.register(r'challenges', views.ChallengeViewSet)
+router.register(r'cves', views.CveViewSet)
+router.register(r'runningchallenges', views.RunningChallengeViewSet)
+router.register(r'runningcves', views.RunningCveViewSet)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^$', RedirectView.as_view(url=r'index/')),
+    url(r'^index/$', TemplateView.as_view(template_name="index.html")),
+
+    url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls)
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

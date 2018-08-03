@@ -1,5 +1,5 @@
 migrations/
-/webpage/
+/webpage/*
 !/webpage/src/
 
 # Byte-compiled / optimized / DLL files
