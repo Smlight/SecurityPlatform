@@ -79,18 +79,19 @@
         this.$refs[formName].validate(valid => {
           if (valid) {
             // console.log(this.$data.form);
-            this.$http.post('/login/', this.$data.form)
+            this.$http.post('/userlogin/', this.$data.form)
               .then(response => {
                 console.log(response);
-                if (response.data.msg === "1") {
+                if (response.data.status !== "ok") {
                   this.$alert('用户名或密码错误', '登录失败', {
                     confirmButtonText: '确定'
                   });
-                } else if (response.data.msg === "0") {
+                } else {
+                  this.$emit('change', this.form.username);
                   this.$alert('即将进入首页', '登录成功', {
                     confirmButtonText: '确定',
                     callback: action => {
-                      location.assign('/#/resume');
+                      this.$router.push('/index');
                     }
                   });
                 }
@@ -105,7 +106,7 @@
         });
       },
       goRegister() {
-        location.assign('/#/register');
+        this.$router.push('/register');
       }
     }
   }

@@ -1,6 +1,7 @@
 <template>
-	<div style="width: 80%; margin: auto;">
-		<h1> welcome to challenges </h1>
+  <div class="wrapper">
+	<div class="content">
+		<h1> Welcome to Challenges </h1>
 		<el-table :data="options" stripe style="width: 100%">
 			<el-table-column prop="title" label="标题" width="">
 			</el-table-column>
@@ -12,9 +13,9 @@
 			</el-table-column>
 			<el-table-column prop="difficulty" label="难度" width="">
 			</el-table-column>
-			<el-table-column fixed="right" label="操作" width="100">
+			<el-table-column prop="id" fixed="right" label="操作">
 				<template slot-scope="scope">
-					<el-button style="padding: 3px 0" type="text" @click="">查看详情>></el-button>
+					<el-button style="padding: 3px 0" type="text" @click="viewMore(scope.row.id)">查看详情>></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -30,36 +31,11 @@
 			</el-pagination>
 		</div>
 	</div>
+  </div>
 </template>
 
 <style scoped>
-.demo-table-expand {
-	font-size: 0;
-}
-.demo-table-expand label {
-	width: 90px;
-	color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-	margin-right: 0;
-	margin-bottom: 0;
-	width: 50%;
-}
-.text {
-	font-size: 14px;
-}
 
-.item {
-	margin-bottom: 18px;
-}
-
-.clearfix:before, .clearfix:after {
-	display: table;
-	content: "";
-}
-.clearfix:after {
-	clear: both
-}
 </style>
 
 <script>
@@ -82,17 +58,31 @@ export default {
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.currentPage = val;
-		}
+		},
+    	viewMore(id) {
+    		// console.log(id);
+    		this.$router.push('/challenges/' + id);
+    	}
 	},
 	computed: {
 		options: function() {
-			return this.list;
+			var res = this.list;
+			for (var i in res) {
+				if (res[i].desc.length > 90) {
+					res[i].desc = res[i].desc.substr(0,90) + '......';
+				}
+			}
+			return res;
 		}
 	},
-	mounted: function() {
-		this.$http.get('/api/challenges.json')
+	mounted () {
+		this.$http.get('/api/challenges.json', {
+		    params: {
+		      page: this.currentPage
+		    }
+		})
 		.then(response => {
-			console.log(response);
+			// console.log(response);
 			if (false) {
 				this.$alert('请检查网络', '获取失败', {
 					confirmButtonText: '确定'
@@ -107,5 +97,5 @@ export default {
 		});
 	}
 }
-
 </script>
+

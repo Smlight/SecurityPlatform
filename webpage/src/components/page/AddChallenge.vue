@@ -145,7 +145,7 @@ export default {
 	},
 	computed: {
 	},
-	mounted: function() {
+	mounted () {
 	}
 }
 </script>

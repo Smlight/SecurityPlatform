@@ -1,8 +1,7 @@
 <template>
   <div class="wrapper">
-    <v-head></v-head>
 	<div class="content">
-		<h1> welcome to CVEs </h1>
+		<h1> Welcome to CVEs </h1>
 		<el-table :data="options" stripe style="width: 100%">
 			<el-table-column prop="cveid" label="CVE编号" width="">
 			</el-table-column>
@@ -42,12 +41,7 @@
 </style>
 
 <script>
-import vHead from '@/components/common/Header';
-
 export default {
-    components: {
-      vHead,
-    },
 	data() {
 		return {
 			list: [],
@@ -68,22 +62,21 @@ export default {
 			this.currentPage = val;
 		},
     	viewMore(id) {
-    		console.log(id);
+    		// console.log(id);
     		this.$router.push('/cves/' + id);
     	}
 	},
 	computed: {
 		options: function() {
-			// var res = this.list;
-			// for (var i in res) {
-			// 	if (res[i].desc.length > 90) {
-			// 		res[i].desc = res[i].desc.substr(0,90) + '......';
-			// 	}
-			// }
-			// return res;
+			var res = this.list;
+			for (var i in res) {
+				if (res[i].desc.length > 90) {
+					res[i].desc = res[i].desc.substr(0,90) + '......';
+				}
+			}
+			return res;
 			return [
 		        {
-		            "id": 123,
 		            "cveid": "CVE-2004-2167",
 		            "desc": "Multiple buffer overflows in LaTeX2rtf 1.9.15, and possibly other versions, allow remote attackers to execute arbitrary code via (1) the expandmacro function, and possibly (2) Environments and (3) TranslateCommand.",
 		            "dtime": "2004-07-16",
@@ -98,14 +91,14 @@ export default {
 		    ];
 		}
 	},
-	mounted: function() {
+	mounted () {
 		this.$http.get('/api/cves.json', {
 		    params: {
 		      page: this.currentPage
 		    }
 		})
 		.then(response => {
-			console.log(response);
+			// console.log(response);
 			if (false) {
 				this.$alert('请检查网络', '获取失败', {
 					confirmButtonText: '确定'
@@ -120,5 +113,4 @@ export default {
 		});
 	}
 }
-
 </script>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import HelloWorld from '@/components/page/HelloWorld'
 import Home from '@/components/page/Home'
 import Login from '@/components/page/Login'
 import Register from '@/components/page/Register'
@@ -9,62 +9,78 @@ import CVEs from '@/components/page/CVEs'
 import CveDetail from '@/components/page/CveDetail'
 import AddChallenge from '@/components/page/AddChallenge'
 import AddCVE from '@/components/page/AddCVE'
-// import Resume from '@/components/page/Resume'
-// import Recommend from '@/components/page/Recommend'
-// import Search from '@/components/page/Search'
+import Terminal from '@/components/page/Terminal'
 
 Vue.use(Router)
 
 export default new Router({
 	routes: [
 	{
-		path: '/',
-		redirect: '/index'
-	},
-	{
 		path: '/index',
 		component: Home,
+		meta: {
+			title: '首页'
+		}
 	},
+    {
+		path: '/terminal',
+		name: 'Terminal',
+		component: Terminal,
+		meta: {
+			title: '网页终端'
+		}
+    },
+	// {
+	// 	path: '/',
+	// 	redirect: '/index'
+	// },
 	{
 		path: '/login',
-		component: Login
+		component: Login,
+		meta: {
+			title: '登录'
+		}
 	},
 	{
 		path: '/register',
-		component: Register
+		component: Register,
+		meta: {
+			title: '注册'
+		}
 	},
 	{
 		path: '/challenges',
-		component: Challenges
+		component: Challenges,
+		meta: {
+			title: 'CTF赛题'
+		}
 	},
 	{
 		path: '/cves',
-		component: CVEs
+		component: CVEs,
+		meta: {
+			title: 'CVE漏洞库'
+		}
 	},
 	{
 		path: '/cves/:id',
-		component: CveDetail
+		component: CveDetail,
+		meta: {
+			title: 'CVE漏洞详情'
+		}
 	},
 	{
 		path: '/addchallenge',
 		component: AddChallenge
 	},
-// 	{
-// 		path: '/resume',
-// 		component: Resume
-// 	},
-// 	{
-// 		path: '/recommend',
-// 		component: Recommend
-// 	},
-// 	{
-// 		path: '/search',
-// 		component: Search
-// 	},
 	{
 		path: '/HelloWorld',
 		name: 'HelloWorld',
 		component: HelloWorld,
+	},
+	{
+		path: '*',
+		redirect: '/index'
 	}
 	]
 })

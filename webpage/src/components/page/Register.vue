@@ -116,7 +116,7 @@
                   this.$alert('即将进入首页', '注册成功', {
                     confirmButtonText: '确定',
                     callback: action => {
-                      location.assign('/#/home');
+                      this.$router.push('/index');
                     }
                   });
                 } else {

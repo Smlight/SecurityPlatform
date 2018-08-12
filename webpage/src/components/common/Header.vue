@@ -7,21 +7,18 @@
           <img :src="logo" height="40" style="margin-top: 4%;">
         </div>
       </el-col>
-      <el-col :md="13">
-        <br/>
-      </el-col>
+      <el-col :md="13">USERNAME: {{ username }}<br/></el-col>
       <el-col :md="3" :xs="20" :sm="20">
         <div class="user-info" style="float: right">
           <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
                   <img class="user-logo" :src="imgUrl">
-                  <span class="user-name"> {{username}} </span>
                 </span>
-            <el-dropdown-menu slot="dropdown" v-if="isLogin === true">
-              <el-dropdown-item command="goInfo">用户信息修改</el-dropdown-item>
+            <el-dropdown-menu slot="dropdown" v-if="username !== ''">
+              <el-dropdown-item command="goInfo">{{ username }}</el-dropdown-item>
               <el-dropdown-item command="goLogout">退出</el-dropdown-item>
             </el-dropdown-menu>
-             <el-dropdown-menu slot="dropdown" v-if="isLogin === false">
+             <el-dropdown-menu slot="dropdown" v-if="username === ''">
               <el-dropdown-item command="goLogin">登录</el-dropdown-item>
               <el-dropdown-item command="goRegister">注册</el-dropdown-item>
             </el-dropdown-menu>
@@ -50,11 +47,6 @@
     text-align: center;
   }
 
-  .navbar {
-    margin-top: 10px;
-    /*width: 900px;*/
-    background: #2E363F;
-  }
   .user-info {
     /*float: right;*/
     /*padding-right: 50px;*/
@@ -79,7 +71,6 @@
     padding-top: 10px;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
 
   }
 
@@ -92,90 +83,54 @@
     text-align: center;
   }
 
-  .is-disabled {
-    cursor: not-allowed;
-  }
-
 </style>
 
 <script>
-
   export default {
+    name: 'Header',
+    props: ['username'],
     data() {
       return {
-        username: '',
-        imgUrl: '',
-        activeIndex: '',
-        isLogin: false,
-        logo: './././static/img/logo.png',
+        imgUrl: '/static/img/avatar.png',
+        logo: '/static/img/logo.png',
       }
     },
-    created: function () {
-      this.getInfo();
+    mounted() {
     },
-    updated: function () {
-      this.getInfo();
+    updated() {
     },
-
     methods: {
-      getInfo() {
-        this.$http.get('/getUserInfo/')
-          .then(response => {
-            console.log(response);
-            if (response.data.msg === "0") {
-              console.log("get info success");
-              this.username = response.data.username;
-              this.imgUrl = response.data.imgUrl;
-               this.isLogin = true;
-            }
-            else if (response.data.msg === "1") {
-              console.log("unlogin");
-              this.imgUrl = response.data.imgUrl;
-              this.isLogin = false;
-            }
-            else {
-              this.$alert('请刷新重试', '获取用户信息失败', {
-                confirmButtonText: '确定'
-              });
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      },
-      isGuest(num) {
-        if (this.username === '') {
-          if (num === 'search') {
-            return false;
-          }
-          else {
-            return true;
-          }
-        }
-      },
       handleCommand(command) {
-        if (command === 'goInfo') {
+        if (command === 'goLogin') {
+          this.goLogin();
+        } else if (command === 'goInfo') {
           this.goInfo();
+        } else if (command === 'goRegister') {
+          this.goRegister();
         }
-        else if (command === 'goLogout') {
-          this.goLogout();
-        }
+      },
+      goLogin() {
+        this.$router.push('/login');
+      },
+      goRegister() {
+        this.$router.push('/register');
       },
       goInfo() {
-//        this.$router.replace("/info");
-        location.assign("/#/info");
+        this.$router.push('/info');
       },
       goLogout() {
-        this.$http.get('/logout/')
+        this.$http.get('/userlogout/')
           .then(response => {
             console.log(response);
-            if (response.data.msg === "0") {
+            if (response.data.status === "ok") {
+              this.$emit('change','');
               this.$alert('即将返回首页', '退出成功', {
-                confirmButtonText: '确定'
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$router.push('/index');
+                }
               });
-              location.assign("/#/login");
-            }
-            else if (response.data.msg === "1") {
+            } else {
               this.$alert('请重试', '退出失败', {
                 confirmButtonText: '确定'
               });

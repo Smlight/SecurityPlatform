@@ -1,34 +1,37 @@
 <template>
   <div class="wrapper">
 	<div class="content">
-		<h1> Welcome to CVEDetail </h1>
+		<h1> Welcome to ChallengeDetail </h1>
 		<div>
 	        <div class="text item">
-	          漏洞编号			{{ CVE.cveid }}
+	          标题			{{ Challenge.title }}
 	        </div>
 	        <div class="text item">
-	          漏洞描述			{{ CVE.desc }}
+	          描述			{{ Challenge.desc }}
 	        </div>
 	        <div class="text item">
-	          披露时间			{{ CVE.dtime }}
+	          年份			{{ Challenge.year }}
 	        </div>
 	        <div class="text item">
-	          漏洞本体程序及版本	{{ CVE.program }} {{ CVE.version }}
+	          比赛			{{ Challenge.game }}
 	        </div>
 	        <div class="text item">
-	          利用难度			{{ CVE.difficulty }}
+	          文件			{{ Challenge.file }}
 	        </div>
 	        <div class="text item">
-	          Docker仓库地址		{{ CVE.docker_repo }}
+	          难度			{{ Challenge.difficulty }}
 	        </div>
 	        <div class="text item">
-	          Vagrant镜像地址	{{ CVE.vagrant_box }}
+	          Docker仓库地址		{{ Challenge.docker_repo }}
 	        </div>
 	        <div class="text item">
-	          poc				{{ CVE.poc }}
+	          Vagrant镜像地址	{{ Challenge.vagrant_box }}
 	        </div>
 	        <div class="text item">
-	          参考资料			{{ CVE.references }}
+	          poc				{{ Challenge.poc }}
+	        </div>
+	        <div class="text item">
+	          参考资料			{{ Challenge.references }}
 	        </div>
         </div>
         <el-button type="primary" @click="goDeploy()">goDeploy</el-button>
@@ -48,12 +51,12 @@
 
 <script>
 export default {
-	name: 'CVE Detail',
+	name: 'Challenge Detail',
     props:['username'],
 	data() {
 		return {
-			CVE: {
-				cveid: null,
+			Challenge: {
+				id: null,
 			}
 		}
 	},
@@ -63,7 +66,7 @@ export default {
 			if (this.username == '') {
 				this.$router.push('/login');
 			} else {
-				this.$http.post('/deploy/', this.$data.CVE.cveid)
+				this.$http.post('/deploychallenge/', this.$data.Challenge.id)
 				.then(response => {
 					console.log(response);
 					if (response.data.status === "ok") {
@@ -88,10 +91,10 @@ export default {
 
 	},
 	created() {
-		this.CVE.cveid = this.$route.params.id;
+		this.Challenge.id = this.$route.params.id;
 	},
 	mounted() {
-		this.$http.get('/api/cves/' + this.CVE.cveid + '.json')
+		this.$http.get('/api/challenges/' + this.Challenge.id + '.json')
 		.then(response => {
 			console.log(response);
 			if (false) {
@@ -99,7 +102,7 @@ export default {
 					confirmButtonText: '确定'
 				});
 			} else {
-				this.CVE = response.data;
+				this.Challenge = response.data;
 			}
 		})
 		.catch(error => {
