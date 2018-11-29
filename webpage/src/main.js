@@ -3,29 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'xterm/dist/xterm.css'
 import ElementUI from 'element-ui'
+import 'xterm/dist/xterm.css'
 import 'element-ui/lib/theme-chalk/index.css' // Element-ui 默认主题
-
-Vue.config.productionTip = false
-Vue.use(ElementUI);
-
-router.beforeEach((to, from, next) => {
-  /* 路由发生变化修改页面title */
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
-  next()
-})
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>',
-  render: h => h(App)
-}).$mount('#app');
 
 import Qs from 'qs'
 import axios from 'axios'
@@ -47,7 +27,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
 var axios_instance = axios.create({
   transformRequest: [function (data) {
     data = Qs.stringify(data);
@@ -57,5 +37,19 @@ var axios_instance = axios.create({
     'Content-Type':'application/x-www-form-urlencoded',
     'X-CSRFToken': getCookie('csrftoken')
   }
-})
-Vue.use(VueAxios, axios_instance)
+});
+Vue.use(VueAxios, axios_instance);
+Vue.use(ElementUI);
+
+Vue.config.productionTip = false;
+
+
+new Vue({
+  el: '#app',
+  router,
+  components: { App },
+  template: '<App/>',
+  render: h => h(App)
+}).$mount('#app');
+
+export default getCookie

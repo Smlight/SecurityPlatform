@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :md="10"><br/></el-col>
+      <el-col :md="14"><br/></el-col>
       <el-col :md="6">
         <div class="noSide">
           <div class="title">
@@ -21,8 +21,8 @@
             </el-form-item>
             <el-row>
               <el-col :md="12"><br/></el-col>
-              <el-col :md="6"><a href="" style="">忘记密码？</a></el-col>
-              <el-col :md="6"><a href="" style="">注册</a></el-col>
+              <el-col :md="6"><el-button round @click="alert('that\'s too bad')">忘记密码？</el-button></el-col>
+              <el-col :md="6"><el-button round @click="goRegister()">注册</el-button></el-col>
             </el-row>
           </el-form>
         </div>
@@ -43,6 +43,7 @@
   }
 
   .noSide {
+    margin: auto;
     margin-top: 5%;
     padding-right: 5%;
     padding-bottom: 5%;
@@ -55,59 +56,61 @@
 </style>
 
 <script>
-
-  export default {
-    data() {
-      return {
-        form: {
-          username: '',
-          password: '',
-          remember: false
-        },
-        rules: {
-          username: [
-            {required: true, message: '请输入用户名', trigger: 'blur'}
-          ],
-          password: [
-            {required: true, message: '请输入密码', trigger: 'blur'}
-          ]
-        }
+export default {
+  data() {
+    return {
+      form: {
+        username: '',
+        password: '',
+        remember: false
+      },
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ]
       }
-    },
-    methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
+    }
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
             // console.log(this.$data.form);
             this.$http.post('/userlogin/', this.$data.form)
-              .then(response => {
-                console.log(response);
-                if (response.data.status !== "ok") {
-                  this.$alert('用户名或密码错误', '登录失败', {
-                    confirmButtonText: '确定'
-                  });
-                } else {
-                  this.$emit('change', this.form.username);
-                  this.$alert('即将进入首页', '登录成功', {
-                    confirmButtonText: '确定',
-                    callback: action => {
-                      this.$router.push('/index');
-                    }
-                  });
-                }
-              })
-              .catch(error => {
-                console.log(error);
-              });
+            .then(response => {
+              console.log(response);
+              if (response.data.status !== "ok") {
+                this.$alert('用户名或密码错误', '登录失败', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$router.go(0);
+                  }
+                });
+              } else {
+                this.$emit('change', this.form.username);
+                this.$alert('即将返回原页面', '登录成功', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$router.go(-1);
+                  }
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
           } else {
             console.log('error submit!!');
             return false;
           }
         });
-      },
-      goRegister() {
-        this.$router.push('/register');
-      }
+    },
+    goRegister() {
+      this.$router.push('/register');
     }
   }
+}
 </script>

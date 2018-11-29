@@ -1,3 +1,4 @@
+*.sqlite3
 migrations/
 /webpage/*
 !/webpage/src/
@@ -38,7 +39,7 @@ coverage.xml
 # Django stuff:
 *.log
 .static_storage/
-.media/
+/media/
 .idea/
 local_settings.py
 

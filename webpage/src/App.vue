@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-head @change='updateInfo' :username='username'/>
-    <router-view @change='updateInfo' @serverup='updateServer' :username='username'/>
+    <router-view @change='updateInfo' @serverup='updateServer' :username='username' :server='server'/>
   </div>
 </template>
 
@@ -31,12 +31,10 @@ export default {
 			server: ''
 		}
 	},
-	mouted() {
+	mounted() {
 		this.$http.get('/getuserinfo/')
 		.then(response => {
-            console.log(response);
             if (response.data.status === "ok") {
-            	console.log("success");
             	this.username = response.data.user;
             } else {
             	console.log(response.data.status);
@@ -49,11 +47,9 @@ export default {
 	methods: {
 		updateInfo(msg) {
 			this.username = msg;
-			console.log('App: Recvied!' + msg);
 		},
 		updateServer(msg) {
-			this.server = msg;
-			console.log('App: Recvied!' + msg);
+			this.server = JSON.stringify(msg);
 		}
 	}
 }

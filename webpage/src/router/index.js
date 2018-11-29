@@ -13,7 +13,7 @@ import Terminal from '@/components/page/Terminal'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
 	routes: [
 	{
 		path: '/index',
@@ -24,7 +24,6 @@ export default new Router({
 	},
     {
 		path: '/terminal',
-		name: 'Terminal',
 		component: Terminal,
 		meta: {
 			title: '网页终端'
@@ -71,7 +70,10 @@ export default new Router({
 	},
 	{
 		path: '/addchallenge',
-		component: AddChallenge
+		component: AddChallenge,
+		meta: {
+			title: '添加CTF赛题'
+		}
 	},
 	{
 		path: '/HelloWorld',
@@ -84,3 +86,13 @@ export default new Router({
 	}
 	]
 })
+
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
+})
+
+export default router

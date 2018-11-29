@@ -31,17 +31,21 @@ router.register(r'runningchallenges', pwnviews.RunningChallengeViewSet)
 router.register(r'runningcves', pwnviews.RunningCveViewSet)
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
-
     url(r'^webssh$', xtermviews.ssh_with_websocket, name='xtermwebssh'),
 
-    url(r'userlogin/', pwnviews.userlogin),
-    url(r'userlogout/', pwnviews.userlogout),
-    url(r'getuserinfo/', pwnviews.getuserinfo),
-    url(r'deploy/', pwnviews.dodeply),
+    url(r'^userlogin/', pwnviews.user_login),
+    url(r'^userlogout/', pwnviews.user_logout),
+    url(r'^getuserinfo/', pwnviews.getuserinfo),
+    url(r'^deploy/', pwnviews.do_deploy),
+    url(r'^search/', pwnviews.do_search),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls)
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    # url(r'.*', TemplateView.as_view(template_name="index.html")),
+    url(r'.*', pwnviews.first_call),
+]

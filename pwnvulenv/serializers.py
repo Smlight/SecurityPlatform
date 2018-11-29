@@ -20,19 +20,25 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return super().update(instance, validated_data)
 
 
-
 class ChallengeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Challenge
-        fields = ('id', 'title', 'desc', 'year', 'game', 'file', 'difficulty', 'docker_repo', 'vagrant_box', 'poc',
-                  'references')
+        fields = ('id', 'title', 'desc', 'year', 'game', 'file', 'points', 'use_docker', 'docker_repo', 'dockerfile',
+                  'vagrantfile', 'poc', 'references')
+
+    def create(self, validated_data):
+        docker_repo = validated_data['docker_repo']
+        if not docker_repo:
+            pass
+        return super().create(validated_data)
 
 
 class CveSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CVE
-        fields = ('cveid', 'desc', 'dtime', 'program', 'version', 'difficulty', 'docker_repo', 'vagrant_box', 'poc',
-                  'references')
+        fields = (
+            'cveid', 'desc', 'year', 'component', 'version', 'vtype', 'severity', 'docker_repo', 'dockerfile',
+            'vagrantfile', 'poc', 'references')
 
 
 class RunningChallengeSerializer(serializers.HyperlinkedModelSerializer):
